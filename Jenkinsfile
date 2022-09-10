@@ -1,26 +1,36 @@
 pipeline {
+    
     agent any
+    tools {
+    maven 'M2_HOME'
+    }
+    triggers {
+    pollSCM ('* * * * *')
+    }
 
     stages {
-        stage('Hello') {
+        stage('maven package') {
             steps {
-                echo 'Hello World'
+                sh 'mvn clean'
+                sh 'mvn install'
+                sh 'mvn package'
             }
         }
         
-        stage('Build') {
+        stage('test') {
             steps {
-                echo 'Hello Build'
+                sh 'mvn test'
             }
-        stage('Hello') {
+        stage('Deploy') {
             steps {
-                echo 'Hello World'
+                echo 'Deploy Step'
+                sleep 10
             }
         }
         
-        stage('Build') {
+        stage('Docker') {
             steps {
-                echo 'Hello Build'
+                echo 'Image step'
             }
         }
     }
